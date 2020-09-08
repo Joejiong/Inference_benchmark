@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+
+dy2stat/
+static/
+build/
+libtorch*
+*.log
+*.pt
