@@ -46,7 +46,7 @@ docker images pull hub.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.1-cudn
 
 根据images，构建容器，并进入此容器
 ```bash
-sudo docker run --name XXX --net=host -v $PWD:/workspace -it hub.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.1-cudnn7  /bin/bash
+sudo nvidia-docker run --name XXX --net=host -v $PWD:/workspace -it hub.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.1-cudnn7  /bin/bash
 ```
 
 克隆paddle的仓库，编译预测库lib文件
@@ -106,7 +106,7 @@ docker pull pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel
 
 根据拉取的镜像，创建容器：
 ```bash
-sudo docker run --name XXX --net=host -v $PWD:/workspace -it pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel  /bin/bash
+sudo nvidia-docker run --name XXX --net=host -v $PWD:/workspace -it pytorch/pytorch:1.6.0-cuda10.1-cudnn7-devel  /bin/bash
 ```
 
 下载torch 1.6版本的官方预测库，并解压，会得到一个libtorch文件夹
