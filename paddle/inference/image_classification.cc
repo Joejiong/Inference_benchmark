@@ -30,13 +30,14 @@ namespace paddle{
     void PrepareTRTConfig(AnalysisConfig *config){
         config->SetModel(FLAGS_dirname + "/model", FLAGS_dirname + "/params");
         if(FLAGS_use_gpu){
-            config->EnableUseGpu(1000, 4);
+            config->EnableUseGpu(1000, 4); // gpu:4
         }else{
             config->DisableGpu();
             if(FLAGS_use_mkldnn) config->EnableMKLDNN();
         }
         
         config->SwitchUseFeedFetchOps(false);
+        config->SwitchIrOptim(false);
     }
 
 

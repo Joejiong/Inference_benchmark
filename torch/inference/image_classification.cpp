@@ -16,14 +16,14 @@ using Time = decltype(std::chrono::high_resolution_clock::now());
 
 bool test_predictor_latency(const char* argv[]){
     auto model_path = argv[1];
-    int batch_size = 1;
+    int batch_size = 4;
     int repeat = 100;
     bool use_gpu = true;
 
     torch::Device device = torch::kCPU;
     if (torch::cuda::is_available() && use_gpu){
       std::cout << "CUDA is available, running on GPU" << std::endl;
-      device = torch::kCUDA;
+      device = torch::Device("cuda:4");
     }
 
     std::cout << "start to load model from " << argv[1] << std::endl;
