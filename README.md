@@ -52,7 +52,7 @@ cd paddle/inference
 
 inference目录下有一个`image_classification.cc`，是resnet50/mobileNetv1的预测样例代码，可以编译测试：
 ```
-./run_build.sh
+./re_build.sh
 ```
 
 执行完毕后，会在当前目录生成一个`image_classification`可执行程序。如果本地有resnet的预测模型，则可以执行预测latency的评测：
@@ -62,7 +62,7 @@ inference目录下有一个`image_classification.cc`，是resnet50/mobileNetv1�
 # 其中 16为batch_size, 后面为模型路径
 ```
 
-#### 1. Torch
+#### 2. Torch
 
 Torch官方也提供了cuda10的镜像，首先拉取images:
 ```bash
@@ -99,7 +99,7 @@ inference目录下有一个`image_classification.cpp`，是resnet50/mobileNetv1�
 # 注意 torch的.pt模型需要用1.6.0版本的torch保存。
 ```
 
-### 二、新模型测试要点
+### 二、添加新模型测试流程
 
 #### 1. 模型准备
 测试paddle和竞品torch、tf的动转静预测性能，首先需要保存 **动转静** 后的模型。
@@ -137,6 +137,11 @@ def save_torch_resnet101():
     resnet.save(torch_model_dir + "resnet101.pt")
 ```
 
+目前需要测的模型列表是：resnet50、mobilenetV1、seq2seq、ptb_lm、yolov3
+
+paddle和torch的模型实现，见仓库：https://github.com/phlrain/example
+
+
 #### 2. 预测接口开发
 paddle的预测接口开发，可以参考`paddle/inference/image_classification.cc`中的代码。
 
@@ -164,3 +169,4 @@ set(PredictorSRCFiles "image_classification.cpp"; "your_new_file.cpp")
 
 #### 4. 测试预测latency
 执行可执行文件，load模型，会输出预测的时间。
+
