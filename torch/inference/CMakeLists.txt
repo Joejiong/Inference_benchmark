@@ -3,6 +3,14 @@ project(custom_ops)
 
 find_package(Torch REQUIRED)
 
-add_executable(example-app example-app.cpp)
-target_link_libraries(example-app "${TORCH_LIBRARIES}")
-set_property(TARGET example-app PROPERTY CXX_STANDARD 14)
+set(PredictorSRCFiles "image_classification.cpp";)
+
+foreach(src_file ${PredictorSRCFiles})
+  message("======> ${src_file} will be compiled.")
+  string(REPLACE ".cpp" "_exe" exe_name ${src_file})
+  add_executable(${exe_name} ${src_file})
+  target_link_libraries(${exe_name} "${TORCH_LIBRARIES}")
+  set_property(TARGET ${exe_name} PROPERTY CXX_STANDARD 14)
+endforeach()
+
+

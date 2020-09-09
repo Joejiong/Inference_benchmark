@@ -16,27 +16,30 @@ using Time = decltype(std::chrono::high_resolution_clock::now());
 
 bool test_predictor_latency(const char* argv[]){
     auto model_path = argv[1];
-    int repeat = 100;
     int batch_size = 1;
+    int repeat = 100;
+    bool use_gpu = true;
 
     torch::Device device = torch::kCPU;
-    if (torch::cuda::is_available()){
+    if (torch::cuda::is_available() && use_gpu){
       std::cout << "CUDA is available, running on GPU" << std::endl;
       device = torch::kCUDA;
     }
 
+    std::cout << "start to load model from " << argv[1] << std::endl;
     torch::jit::script::Module module = torch::jit::load(argv[1]);
     module.to(device);
 
+    std::cout << "create input tensor..." << std::endl;
     // Create a vector of inputs.
     std::vector<torch::jit::IValue> inputs;
-    inputs.push_back(torch::ones({batch_size, 3, 224,224}, device));
-    // inputs.push_back(torch::ones({20}, device));
+    inputs.push_back(torch::ones({batch_size, 3, 224,224}).to(device));
     
     // warmup
+    std::cout << "warm up..." << std::endl;
     at::Tensor output = module.forward(inputs).toTensor();
     
-
+    std::cout << "start to inference..." << std::endl;
     Time time1 = time();
     for(int i=0; i < repeat; ++i){
       at::Tensor output = module.forward(inputs).toTensor();
@@ -48,8 +51,8 @@ bool test_predictor_latency(const char* argv[]){
 }
 
 int main(int argc, const char* argv[]) {
-      if (argc != 2) {
-            std::cerr << "usage: example-app <path-to-exported-script-module>\n";
+      if (argc < 2) {
+            std::cerr << "usage: ./exe model_dir_name\n";
             return -1;
       }
 
