@@ -178,6 +178,8 @@ def save_torch_resnet101():
 paddle和torch的模型实现，见仓库：https://github.com/phlrain/example
 
 
+tensorflow的可以将keras的模型保存为一个单独的`.pb`文件，以供C++端直接加载，详细步骤请参考：[教程](https://blog.csdn.net/ouening/article/details/104335552)
+
 #### 2. 预测接口开发
 paddle的预测接口开发，可以参考`paddle/inference/image_classification.cc`中的代码。
 
