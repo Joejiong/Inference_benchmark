@@ -1,9 +1,7 @@
 
-import os
 import tensorflow as tf
 from tensorflow.keras.applications.resnet import ResNet101, ResNet50
 from tensorflow.keras.applications.mobilenet import MobileNet
-from tensorflow.python.tools import freeze_graph
 from tensorflow.python.framework.convert_to_constants import convert_variables_to_constants_v2
 
 

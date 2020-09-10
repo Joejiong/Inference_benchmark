@@ -135,6 +135,28 @@ inference目录下有一个`image_classification.cpp`，是resnet50/mobileNetv1�
 # 注意 torch的.pt模型需要用1.6.0版本的torch保存。
 ```
 
+### 3. Tensorflow
+
+Tensorflow并没有像Pytorch那样提供官方编译好的C++预测lib，需要依赖bazel进行编译，但由于环境复杂，编译流程较长，极容易踩坑。因此我们采用了开源的docker镜像。
+
+下载支持cuda10.1的预编译好的镜像：
+```bash
+sudo nvidia-docker run --name XXX --net=host -v $PWD:/workspace -it floopcz/tensorflow_cc:ubuntu-cuda  /bin/bash
+```
+
+在根目录有一个`/tensorflow_cc`目录，是tensorflow的C++预测库项目
+
+切换到`tensorflow/inference`目录，有一个`image_classification.cpp`样例文件，是resnet、mobilenet模型的预测代码
+```
+cd inference_benchmark/tensorflow/inference/
+./re_build.sh  # 执行编译，生成image_classification执行文件
+
+python image_classification.py # 保存模型
+
+./image_classification  # 执行预测，load模型的路径是写死的目前（待优化）
+```
+
+
 ### 二、添加新模型测试流程
 
 #### 1. 模型准备

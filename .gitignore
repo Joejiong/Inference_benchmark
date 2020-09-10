@@ -38,3 +38,6 @@ build/
 libtorch*
 *.log
 *.pt
+*.pb
+image_classification
+image_classification_exe
