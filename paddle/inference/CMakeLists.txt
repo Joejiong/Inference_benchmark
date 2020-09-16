@@ -51,6 +51,7 @@ link_directories("${PADDLE_LIB}/paddle/lib")
 
 add_executable(image_classification image_classification.cc)
 add_executable(yolov3 yolov3.cc)
+add_executable(ptb_lm ptb_lm.cc)
 
 
 if(WITH_MKL)
@@ -88,6 +89,6 @@ endif()
 
 target_link_libraries(image_classification ${DEPS})
 target_link_libraries(yolov3 ${DEPS})
-
+target_link_libraries(ptb_lm ${DEPS})
     
 
