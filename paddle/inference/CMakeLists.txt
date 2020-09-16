@@ -24,9 +24,9 @@ if(NOT DEFINED PADDLE_LIB)
     message(FATAL_ERROR "need -DPADDLE_LIB=/path/paddle/lib")
 endif()
 
-if(NOT DEFINED DEMO_NAME)
-    message(FATAL_ERROR "need -DDEMEO_NAME=demo_name")
-endif()
+# if(NOT DEFINED DEMO_NAME)
+#     message(FATAL_ERROR "need -DDEMEO_NAME=demo_name")
+# endif()
 
 
 include_directories("${PADDLE_LIB}")
@@ -49,7 +49,9 @@ link_directories("${PADDLE_LIB}/third_party/install/gflags/lib")
 link_directories("${PADDLE_LIB}/third_party/install/xxhash/lib")
 link_directories("${PADDLE_LIB}/paddle/lib")
 
-add_executable(${DEMO_NAME} ${DEMO_NAME}.cc)
+add_executable(image_classification image_classification.cc)
+add_executable(yolov3 yolov3.cc)
+
 
 if(WITH_MKL)
     include_directories("${PADDLE_LIB}/third_party/install/mklml/lib")
@@ -84,7 +86,8 @@ if(WITH_GPU)
     set(DEPS ${DEPS} ${CUDNN_LIB}/libcudnn${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
 
-target_link_libraries(${DEMO_NAME} ${DEPS})
+target_link_libraries(image_classification ${DEPS})
+target_link_libraries(yolov3 ${DEPS})
 
     
 

@@ -17,7 +17,6 @@ rm -rf *
 
 cmake .. -DPADDLE_LIB=${LIB_DIR} \
   -DWITH_MKL=${WITH_MKL} \
-  -DDEMO_NAME=${DEMO_NAME} \
   -DWITH_GPU=${WITH_GPU} \
   -DWITH_STATIC_LIB=OFF \
   -DUSE_TENSORRT=${USE_TENSORRT} \
@@ -26,3 +25,4 @@ cmake .. -DPADDLE_LIB=${LIB_DIR} \
 
 make -j4
 cp image_classification ../
+cp yolov3 ../

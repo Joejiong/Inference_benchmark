@@ -7,3 +7,4 @@
  make
 
  mv image_classification ../
+ mv yolov3 ../
