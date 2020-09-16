@@ -82,8 +82,8 @@ cmake .. -DWITH_TESTING=OFF \
         -DWITH_PATHON=OFF \
         -DWITH_MKLDNN=OFF
 
-make -j12
-make inference_lib_dist -j12
+make -j$(nproc)
+make inference_lib_dist -j$(nproc)
 ```
 
 执行脚本，编译预测库，最终会在`build_infer`目录下生成一个`fluid_inference_install_dir`目录，包含了预测库文件，后续用于配置此路径。
@@ -96,12 +96,13 @@ cd paddle/inference
 
 inference目录下有一个`image_classification.cc`，是resnet50/mobileNetv1的预测样例代码，可以编译测试：
 ```
+apt-get update & apt install libprotobuf-dev
 ./re_build.sh
 ```
 
 执行完毕后，会在当前目录生成一个`image_classification`可执行程序。如果本地有resnet的预测模型，则可以执行预测latency的评测：
 ```bash
-./test_latency 16 ../static/resnet50
+./test_latency.sh 16 ../static/resnet50
 
 # 其中 16为batch_size, 后面为模型路径
 ```
@@ -120,12 +121,14 @@ sudo nvidia-docker run --name XXX --net=host -v $PWD:/workspace -it pytorch/pyto
 
 下载torch 1.6版本的官方预测库，并解压，会得到一个libtorch文件夹
 ```
+apt-get update & apt-get install wget
 wget https://download.pytorch.org/libtorch/cu101/libtorch-cxx11-abi-shared-with-deps-1.6.0%2Bcu101.zip
 unzip libtorch-cxx11-abi-shared-with-deps-1.6.0+cu101.zip
 ```
 
 然后克隆此仓库，并将之前的libtorch文件夹放到torch目录下
 ```
+apt-get update & apt-get install git -y
 git clone https://github.com/Aurelius84/Inference_benchmark.git
 cd torch
 cp -r your/path/to/libtorch .
@@ -138,7 +141,7 @@ inference目录下有一个`image_classification.cpp`，是resnet50/mobileNetv1�
 
 执行完毕后，会在当前目录生成一个`image_classification_exe`可执行程序。如果本地有resnet的预测模型，则可以执行预测latency的评测：
 ```bash
-./test_latency ../dy2stat/resnet50.pt
+./test_latency.sh ../dy2stat/resnet50.pt
 
 # 注意 torch的.pt模型需要用1.6.0版本的torch保存。
 ```
@@ -238,3 +241,5 @@ set(PredictorSRCFiles "image_classification.cpp"; "your_new_file.cpp")
 #### 4. 测试预测latency
 执行可执行文件，load模型，会输出预测的时间。
 
+### 三. 参考文档
+动态图转静态图文档：https://www.paddlepaddle.org.cn/documentation/docs/zh/2.0-beta/guides/dygraph_to_static/program_translator_cn.html
