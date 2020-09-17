@@ -102,9 +102,9 @@ apt-get update & apt install libprotobuf-dev
 
 执行完毕后，会在当前目录生成一个`image_classification`可执行程序。如果本地有resnet的预测模型，则可以执行预测latency的评测：
 ```bash
-./test_latency.sh 16 ../static/resnet50
+./test_latency.sh 16 ../static/resnet50  
 
-# 其中 16为batch_size, 后面为模型路径
+# 其中 16为batch_size, 后面为模型路径，可根据自己实际目录修改
 ```
 
 #### 2. Torch
@@ -143,7 +143,7 @@ inference目录下有一个`image_classification.cpp`，是resnet50/mobileNetv1�
 ```bash
 ./test_latency.sh ../dy2stat/resnet50.pt
 
-# 注意 torch的.pt模型需要用1.6.0版本的torch保存。
+# 注意 torch的.pt模型需要用1.6.0版本的torch保存，路径可根据自己实际目录修改
 ```
 
 ### 3. Tensorflow
