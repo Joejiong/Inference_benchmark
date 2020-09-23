@@ -3,7 +3,7 @@
 ## 一、模型导出
 
 ### 1. 静态图模型
-Paddle的静态图模型代码在 [models/PaddleNLP/seq2seq/seq2seq/base_model.py]()。`BaseModel`中的`build_graph`方法提供了`mode='beam_search'`参数，用于配置训练模式还是预测模式。
+Paddle的静态图模型代码在 [models/PaddleNLP/seq2seq/seq2seq/base_model.py](https://github.com/PaddlePaddle/models/blob/release/1.8/PaddleNLP/seq2seq/seq2seq/base_model.py)。`BaseModel`中的`build_graph`方法提供了`mode='beam_search'`参数，用于配置训练模式还是预测模式。
 
 在`base_model.py`同级目录下，新建一个py文件，用于导出静态图模型。代码如下：
 ```python
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 执行上述py文件，会在`model_dir`目录下导出静态图模型文件`model`和参数文件`params`.
 
 ### 2. 动转静模型
-seq2seq动态模型在 [models/dygraph/seq2seq/base_model.py]()路径下。在动转静`to_static`迭代时，我们针对dygraph目录的模型做过对齐。因此动态图模型可以基于 [paddle/python/paddle/fluid/tests/unittests/dygraph_to_static/seq2seq_dygraph_model.py]()路劲代码进行转换。
+seq2seq动态模型在 [models/dygraph/seq2seq/base_model.py](https://github.com/PaddlePaddle/models/blob/release/1.8/dygraph/seq2seq/base_model.py)路径下。在动转静`to_static`迭代时，我们针对dygraph目录的模型做过对齐。因此动态图模型可以基于 [paddle/python/paddle/fluid/tests/unittests/dygraph_to_static/seq2seq_dygraph_model.py](https://github.com/PaddlePaddle/Paddle/blob/develop/python/paddle/fluid/tests/unittests/dygraph_to_static/seq2seq_dygraph_model.py)路劲代码进行转换。
 
 在`seq2seq_dygraph_model.py`同级目录下，新建一个py文件，代码如下。建议使用paddle2.0beta或develop分支的whl包执行如下代码。
 
