@@ -6,9 +6,10 @@
 #include <functional>
 #include <iostream>
 #include <cstring>
+#include <algorithm>
 #include "paddle/include/paddle_inference_api.h"
 
-DEFINE_string(dirname, "../ptb_lm", "Directory of the inference model.");
+DEFINE_string(dirname, "../seq2seq", "Directory of the inference model.");
 DEFINE_bool(use_gpu, true, "whether use gpu");
 DEFINE_bool(use_mkldnn, true, "whether use mkldnn");
 DEFINE_int32(batch_size, 1, "batch size of inference model");
@@ -48,35 +49,28 @@ namespace paddle{
         PrepareTRTConfig(&config);
         auto predictor = CreatePaddlePredictor(config);
 
-        int num_step = 20;
-        int input_num = batch_size * num_step;
+        int max_seq_len = 20;
+        int ids_num = batch_size * max_seq_len;
 
-        int64_t *input = new int64_t[input_num];
-        memset(input, 0, input_num * sizeof(int64_t));
+        // src word ids
+        int64_t *src_ids = new int64_t[ids_num];
+        int64_t constant_id = 12;
+        std::fill(src_ids, src_ids+ids_num, constant_id);
+        // memset(src_ids, constant_id, ids_num * sizeof(int64_t)); 
 
-        // init init_hidden
-        int num_layer = 2;
-        int hidden_size = 200;
-
-        int hidden_num = num_layer * hidden_size * batch_size;
-        float *init_hidden = new float[hidden_num];
-        memset(init_hidden, 0, hidden_num * sizeof(float));
-        // init init_hidden
-        float *init_cell = new float[hidden_num];
-        memset(init_cell, 0, hidden_num * sizeof(float));
+        // src seq len
+        int64_t *seq_len = new int64_t[batch_size];
+        memset(seq_len, max_seq_len, batch_size * sizeof(int64_t));
 
         auto input_names = predictor->GetInputNames();
-        auto input_t = predictor->GetInputTensor(input_names[0]);  // input
-        input_t->Reshape({batch_size, num_step});
-        input_t->copy_from_cpu(input);
+        auto input_t = predictor->GetInputTensor(input_names[0]);  // src_ids
+        input_t->Reshape({batch_size, max_seq_len});
+        input_t->copy_from_cpu(src_ids);
 
-        auto init_hidden_t = predictor->GetInputTensor(input_names[1]);  // init_hidden
-        init_hidden_t->Reshape({num_layer, batch_size, hidden_size});
-        init_hidden_t->copy_from_cpu(init_hidden);
+        auto seq_len_t = predictor->GetInputTensor(input_names[1]);  // src_seq_len
+        seq_len_t->Reshape({batch_size});
+        seq_len_t->copy_from_cpu(seq_len);
 
-        auto init_cell_t = predictor->GetInputTensor(input_names[2]);  // init_cell
-        init_cell_t->Reshape({num_layer, batch_size, hidden_size});
-        init_cell_t->copy_from_cpu(init_cell);
 
         // warmup
         for(int i=0;i<5;++i){
@@ -87,7 +81,7 @@ namespace paddle{
         for(size_t i=0; i < repeat; ++i){
             CHECK(predictor->ZeroCopyRun());
 
-            std::vector<float> out_data;
+            std::vector<int64_t> out_data;
             auto output_names = predictor->GetOutputNames();
             auto output_t = predictor->GetOutputTensor(output_names[0]);
             std::vector<int> output_shape = output_t->shape();
